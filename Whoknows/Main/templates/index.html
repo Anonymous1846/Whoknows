@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whoknows Blog</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1 class="display-4">Whoknows Blog</h1>
+    {% if request.user.is_authenticated %}
+    	<a class="btn btn-primary mb-2" href="{% url 'new-topic' %}">New Post</a>
+    {% endif %}
+    
+
+    <ul class="list-group">
+        {% for topic in object_list %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'topic-detail' topic.pk %}" class="text-decoration-none">
+                        <h5 class="mb-0">{{ topic.title }}</h5>
+                    </a>
+                    <small>{{ topic.date_added|date:"F d, Y" }}</small>
+                </div>
+                <p class="mb-0">{{ topic.content|truncatechars:150 }}</p>
+                {% if topic.author == request.user %}
+                <small>By Me</small>
+                {% else %}
+                	<small>By {{ topic.author }}</small>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

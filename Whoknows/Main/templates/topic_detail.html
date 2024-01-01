@@ -1,0 +1,46 @@
+<h1>{{ topic.title}}</h1>
+<hr>
+
+<!-- Link to trigger delete confirmation -->
+  <a href="#" onclick="showDeleteConfirmation()">Delete Post</a>
+
+  <!-- Delete confirmation popup -->
+  <div id="deleteConfirmation" style="display: none;">
+    <p>Are you sure you want to delete "{{ topic.title }}"?</p>
+    <button onclick="deletePost()">Yes, delete</button>
+    <button onclick="hideDeleteConfirmation()">Cancel</button>
+  </div>
+
+  <script>
+    function showDeleteConfirmation() {
+      document.getElementById('deleteConfirmation').style.display = 'block';
+    }
+
+    function hideDeleteConfirmation() {
+      document.getElementById('deleteConfirmation').style.display = 'none';
+    }
+
+    function deletePost() {
+      // Perform the actual deletion here
+      // You can use AJAX to send a request to the server to delete the post
+      // For simplicity, this example assumes the server responds with a success message
+
+      // Example AJAX request:
+    	console.log('{{ topic }}')
+      fetch("{% url 'delete-topic' pk=topic.id %}", { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = data.url;  // Redirect to the success URL
+          }
+          else{
+          	console.log(data)
+          }
+        });
+
+     
+      window.location.href = '/';
+    }
+  </script>
+
+{{ topic.content }}
