@@ -4,10 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whoknows Blog</title>
+
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS for styling -->
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff;
+        }
+
+        .list-group-item {
+            background-color: #1e1e1e;
+            border-color: #333333;
+            color: #ffffff;
+        }
+
+        .list-group-item:hover {
+            background-color: #333333;
+        }
+    </style>
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Whoknows Blog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'new-topic' %}">New Post</a>
+                    </li>
+                    <li class="nav-item">
+                        
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <div class="container mt-4">
     <h1 class="display-4">Whoknows Blog</h1>
@@ -15,7 +77,6 @@
     	<a class="btn btn-primary mb-2" href="{% url 'new-topic' %}">New Post</a>
     {% endif %}
     
-
     <ul class="list-group">
         {% for topic in object_list %}
             <li class="list-group-item">
@@ -23,20 +84,23 @@
                     <a href="{% url 'topic-detail' topic.pk %}" class="text-decoration-none">
                         <h5 class="mb-0">{{ topic.title }}</h5>
                     </a>
-                    <small>{{ topic.date_added|date:"F d, Y" }}</small>
+                    <small>{{ topic.created_at|date:"F d, Y" }}</small>
                 </div>
                 <p class="mb-0">{{ topic.content|truncatechars:150 }}</p>
                 {% if topic.author == request.user %}
                 <small>By Me</small>
                 {% else %}
-                	<small>By {{ topic.author }}</small>
+                	<small>By {{ topic.author }}
+                	
                 {% endif %}
             </li>
         {% endfor %}
     </ul>
+</div>
 </div>
 
 <!-- Include Bootstrap JS and Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
